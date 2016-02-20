@@ -6,20 +6,31 @@ $(document).ready(function () {
 
     var context = $("#screenCanvas")[0].getContext("2d");
 
-    var x = 0;
-    var y = 0;
-    var height = 50;
+    var screenHeight = $("#screenCanvas").height();
+    var screenWidth = $("#screenCanvas").width();
+
+    var x = screenWidth / 2.0;
+    var y = screenHeight / 2.0;
+ 
+    var maxRadius = null;
+    if (screenWidth > screenHeight) {
+        maxRadius = screenHeight - y;
+    } else {
+        maxRadius = screenWidth - x;
+    }
+
+    console.log("max radius: " + maxRadius);
 
     // Listens for message event and creates a new rectangle
     // every time the event occurs.
     $(document).on("message", function (evt) {
         context.fillStyle = evt.color;
-        var width = evt.weight * 2;
-        if ((x + width) > $("#screenCanvas").width()) {
-            x = 0;
-            y += 50;
-        }
-        context.fillRect(x, y, width, height);
-        x += width;
+        console.log("creating circle");
+        var radius = (evt.weight / 100) * maxRadius;
+        context.globalAlpha = 1 / evt.weight;
+        context.beginPath();
+        context.arc(x, y, radius, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
     });
 });
