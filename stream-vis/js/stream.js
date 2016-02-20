@@ -6,11 +6,12 @@
 			range = [1, 100];
 
 		window.streamInterval = setInterval(function(){
-			$doc.trigger("message", {
+		    $doc.trigger({
+                type: "message",
 				color: '#'+(Math.random()*0xFFFFFF<<0).toString(16),
 				weight: Math.max(Math.floor(Math.random() * range[1]), range[0])
 			});
-			console.log("running");
+			
 		}, 1000);
 
 	});
